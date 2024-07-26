@@ -1,4 +1,4 @@
-import UserSchema from "../interfaces/user";
+import UserSchema from "../utils/user";
 
 var mongoose = require("mongoose");
 
