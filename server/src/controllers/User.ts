@@ -82,6 +82,8 @@ exports.update = async (req, res) => {
 
 // Supprimer un utilisateur avec un id
 exports.destroy = async (req, res) => {
+  const id = req.params.id;
+
   await UserModel.findByIdAndDelete(req.params.id)
     .then((data) => {
       if (!data) {
