@@ -8,15 +8,19 @@ var schema: UserSchema = new mongoose.Schema({
     required: true,
     unique: true,
   },
-  firstName: {
+  name: {
     type: String,
     default: "",
   },
-  lastName: {
+  password: {
     type: String,
-    default: "",
+    required: true,
   },
-  phone: String,
+  role: {
+    type: String,
+    enum: ["user", "admin"],
+    default: "user",
+  },
 });
 
 var user = new mongoose.model("User", schema);
