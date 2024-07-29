@@ -1,21 +1,20 @@
+import jwt from "jsonwebtoken";
+import bcrypt from "bcrypt";
+
 const UserModel = require("../models/user");
 
-// Création et sauvegarde d'un nouveau utilisateur
-exports.create = async (req, res) => {
-  if (
-    !req.body.email &&
-    !req.body.firstName &&
-    !req.body.lastName &&
-    !req.body.phone
-  ) {
+// Enregistrer un nouvelle utilisateur
+exports.register = async (req, res) => {
+  if (!req.body.email && !req.body.name && !req.body.password) {
     res.status(400).send({ message: "Content can not be empty!" });
   }
 
+  const hashedPassword = await bcrypt.hash(req.body.password, 10);
+
   const user = new UserModel({
     email: req.body.email,
-    firstName: req.body.firstName,
-    lastName: req.body.lastName,
-    phone: req.body.phone,
+    name: req.body.name,
+    password: hashedPassword,
   });
 
   await user
@@ -33,6 +32,35 @@ exports.create = async (req, res) => {
     });
 };
 
+// Connecter un utilisateur
+exports.login = async (req, res) => {
+  const { name, password } = req.body;
+
+  if (!name && !password) {
+    res.status(400).send({ message: "Content can not be empty!" });
+  }
+
+  try {
+    const user = await UserModel.findOne({ name });
+    if (!user) {
+      res.status(404).json({ message: "User not found" });
+    }
+
+    const passwordMatch = bcrypt.compare(req.body.password, user.password);
+
+    if (!passwordMatch) {
+      res.status(401).json({ message: "Incorrect password" });
+    }
+
+    const token = jwt.sign({ userId: user._id }, process.env.SECRET_KEY, {
+      expiresIn: "1 hour",
+    });
+    res.json({ token });
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
+};
+
 // Récupérer tous les utilisateurs de la database
 exports.findAll = async (req, res) => {
   try {
@@ -45,8 +73,10 @@ exports.findAll = async (req, res) => {
 
 // Récupérer un utilisateur avec son id
 exports.findOne = async (req, res) => {
+  const id = req.user.userId;
+
   try {
-    const user = await UserModel.findById(req.params.id);
+    const user = await UserModel.findById(id);
     res.status(200).json(user);
   } catch (error) {
     res.status(404).json({ message: error.message });
@@ -61,7 +91,7 @@ exports.update = async (req, res) => {
     });
   }
 
-  const id = req.params.id;
+  const id = req.user.userId;
 
   await UserModel.findByIdAndUpdate(id, req.body, { useFindAndModify: false })
     .then((data) => {
@@ -82,9 +112,9 @@ exports.update = async (req, res) => {
 
 // Supprimer un utilisateur avec un id
 exports.destroy = async (req, res) => {
-  const id = req.params.id;
+  const id = req.user.userId;
 
-  await UserModel.findByIdAndDelete(req.params.id)
+  await UserModel.findByIdAndDelete(id)
     .then((data) => {
       if (!data) {
         res.status(404).send({
