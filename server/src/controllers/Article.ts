@@ -4,7 +4,7 @@ const UserModel = require("../models/user");
 // Création et sauvegarde d'un article
 exports.create = async (req, res) => {
   if (!req.body.topic && !req.body.content) {
-    res.status(400).send({ message: "Content can not be empty!" });
+    return res.status(400).send({ message: "Content can not be empty!" });
   }
 
   const userId = req.user.userId;
@@ -61,7 +61,7 @@ exports.findOne = async (req, res) => {
 // Mise à jour d'un article avec son id
 exports.update = async (req, res) => {
   if (!req.body) {
-    res.status(400).send({
+    return res.status(400).send({
       message: "Data to update can not be empty!",
     });
   }
