@@ -23,6 +23,10 @@ app.use("/user", UserRoute);
 const ArticleRoute = require("./routes/Articles");
 app.use("/article", ArticleRoute);
 
+// Notice route
+const NoticeRoute = require("./routes/Notice");
+app.use("/notice", NoticeRoute);
+
 app.listen(port, () => {
   return console.log(`Express is listening at http://localhost:${port}`);
 });

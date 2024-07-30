@@ -6,7 +6,7 @@ const UserModel = require("../models/user");
 // Enregistrer un nouvelle utilisateur
 exports.register = async (req, res) => {
   if (!req.body.email && !req.body.name && !req.body.password) {
-    res.status(400).send({ message: "Content can not be empty!" });
+    return res.status(400).send({ message: "Content can not be empty!" });
   }
 
   const hashedPassword = await bcrypt.hash(req.body.password, 10);
@@ -37,19 +37,22 @@ exports.login = async (req, res) => {
   const { name, password } = req.body;
 
   if (!name && !password) {
-    res.status(400).send({ message: "Content can not be empty!" });
+    return res.status(400).send({ message: "Content can not be empty!" });
   }
 
   try {
     const user = await UserModel.findOne({ name });
     if (!user) {
-      res.status(404).json({ message: "User not found" });
+      return res.status(404).json({ message: "User not found" });
     }
 
-    const passwordMatch = bcrypt.compare(req.body.password, user.password);
+    const passwordMatch = await bcrypt.compare(
+      req.body.password,
+      user.password
+    );
 
     if (!passwordMatch) {
-      res.status(401).json({ message: "Incorrect password" });
+      return res.status(401).json({ message: "Incorrect password" });
     }
 
     const token = jwt.sign({ userId: user._id }, process.env.SECRET_KEY, {
@@ -86,7 +89,7 @@ exports.findOne = async (req, res) => {
 // Mise à jour d'un utilisateur avec son id
 exports.update = async (req, res) => {
   if (!req.body) {
-    res.status(400).send({
+    return res.status(400).send({
       message: "Data to update can not be empty!",
     });
   }
