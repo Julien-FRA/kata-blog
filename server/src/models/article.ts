@@ -3,6 +3,10 @@ import ArticleSchema from "../utils/article";
 var mongoose = require("mongoose");
 
 var schema: ArticleSchema = new mongoose.Schema({
+  userId: {
+    type: String,
+    required: true,
+  },
   author: {
     type: String,
     required: true,

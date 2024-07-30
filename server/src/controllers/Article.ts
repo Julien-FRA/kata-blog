@@ -1,13 +1,23 @@
 const ArticleModel = require("../models/article");
+const UserModel = require("../models/user");
 
 // Création et sauvegarde d'un article
 exports.create = async (req, res) => {
-  if (!req.body.author && !req.body.topic && !req.body.content) {
+  if (!req.body.topic && !req.body.content) {
     res.status(400).send({ message: "Content can not be empty!" });
   }
 
+  const userId = req.user.userId;
+
+  const user = await UserModel.findById(userId);
+
+  if (!user) {
+    return res.status(404).send({ message: "User not found..." });
+  }
+
   const article = new ArticleModel({
-    author: req.body.author,
+    userId: userId,
+    author: user.name,
     date: new Date(),
     topic: req.body.topic,
     content: req.body.content,
@@ -56,9 +66,23 @@ exports.update = async (req, res) => {
     });
   }
 
-  const id = req.params.id;
+  const currentUserId = req.user.userId;
 
-  await ArticleModel.findByIdAndUpdate(id, req.body, {
+  const articleId = req.params.id;
+
+  const article = await ArticleModel.findById(articleId);
+
+  if (!article) {
+    return res.status(404).send({ message: "Article not found..." });
+  }
+
+  const userArticleId = article.userId;
+
+  if (currentUserId != userArticleId) {
+    return res.status(401).send({ message: "Its not your article!" });
+  }
+
+  await ArticleModel.findByIdAndUpdate(articleId, req.body, {
     useFindAndModify: false,
   })
     .then((data) => {
@@ -79,9 +103,23 @@ exports.update = async (req, res) => {
 
 // Supprimer un article avec un id
 exports.destroy = async (req, res) => {
-  const id = req.params.id;
+  const currentUserId = req.user.userId;
 
-  await ArticleModel.findByIdAndDelete(id)
+  const articleId = req.params.id;
+
+  const article = await ArticleModel.findById(articleId);
+
+  if (!article) {
+    return res.status(404).send({ message: "Article not found..." });
+  }
+
+  const userArticleId = article.userId;
+
+  if (currentUserId != userArticleId) {
+    return res.status(401).send({ message: "Its not your article!" });
+  }
+
+  await ArticleModel.findByIdAndDelete(articleId)
     .then((data) => {
       if (!data) {
         res.status(404).send({
