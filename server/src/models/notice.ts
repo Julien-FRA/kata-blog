@@ -3,13 +3,13 @@ import NoticeSchema from "../utils/notice";
 var mongoose = require("mongoose");
 
 var schema: NoticeSchema = new mongoose.Schema({
+  article: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Article",
+  },
   userId: {
     type: String,
-    ref: "User",
-  },
-  articleId: {
-    type: String,
-    ref: "Article",
+    required: true,
   },
   userName: {
     type: String,
