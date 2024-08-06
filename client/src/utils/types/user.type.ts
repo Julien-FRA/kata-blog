@@ -1,10 +1,10 @@
-export type CreateDto<TypeDto> = Omit<TypeDto, "id">;
-
-export type UserDto = {
-  id: string;
+export type CreateUserDto = {
   email: string;
   name: string;
   password: string;
 };
 
-export type CreateUserDto = CreateDto<UserDto>;
+export type LoginUserDto = {
+  name: string;
+  password: string;
+};
