@@ -1,22 +1,22 @@
 import React, { useState } from "react";
-import { useForm } from "react-hook-form";
-import { CreateUserDto } from "../../../utils/types/user.type";
-import { userRegister } from "../../../utils/api/user.api";
 import { Alert, Form, Button } from "react-bootstrap";
+import { useForm } from "react-hook-form";
+import { LoginUserDto } from "../../../utils/types/user.type";
+import { userLogin } from "../../../utils/api/user.api";
 
-export const FormRegister = () => {
-  const { register, handleSubmit } = useForm<CreateUserDto>();
+export const FormLogin = () => {
+  const { register, handleSubmit } = useForm<LoginUserDto>();
   const [success, setSuccess] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
 
-  const onSubmit = handleSubmit(async (data: CreateUserDto) => {
-    const res: any = await userRegister({
-      email: data.email,
+  const onSubmit = handleSubmit(async (data: LoginUserDto) => {
+    const res: any = await userLogin({
       name: data.name,
       password: data.password,
     });
 
-    if (res.user) {
+    if (res.token) {
+      localStorage.setItem("token", res.token);
       setSuccess(true);
       setError(false);
     } else {
@@ -27,15 +27,6 @@ export const FormRegister = () => {
 
   return (
     <Form onSubmit={onSubmit}>
-      <Form.Group className="mb-3" controlId="formEmail">
-        <Form.Label>Adresse mail</Form.Label>
-        <Form.Control
-          required
-          type="email"
-          placeholder="Votre adresse mail"
-          {...register("email")}
-        />
-      </Form.Group>
       <Form.Group className="mb-3" controlId="formName">
         <Form.Label>Nom</Form.Label>
         <Form.Control
@@ -56,16 +47,12 @@ export const FormRegister = () => {
       </Form.Group>
       {success && (
         <Alert variant="success">
-          Votre compte a été créée avec succès !
+          Vous êtes connecté !
           <br />
-          <Alert.Link href="/login">Vous connectez</Alert.Link>
+          <Alert.Link href="/">Page d'accueil</Alert.Link>
         </Alert>
       )}
-      {error && (
-        <Alert variant="danger">
-          Erreur lors de la création de votre compte...
-        </Alert>
-      )}
+      {error && <Alert variant="danger">Erreur lors de la connection...</Alert>}
       <Button variant="primary" type="submit">
         Envoyer
       </Button>
