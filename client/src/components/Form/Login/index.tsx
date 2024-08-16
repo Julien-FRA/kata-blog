@@ -3,9 +3,11 @@ import { Alert, Form, Button } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { LoginUserDto } from "../../../utils/types/user.type";
 import { userLogin } from "../../../utils/api/user.api";
+import { useAuth } from "../../../utils/hooks/useAuth";
 
 export const FormLogin = () => {
   const { register, handleSubmit } = useForm<LoginUserDto>();
+  const { login } = useAuth();
   const [success, setSuccess] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
 
@@ -16,7 +18,8 @@ export const FormLogin = () => {
     });
 
     if (res.token) {
-      localStorage.setItem("token", res.token);
+      login(res.token);
+      console.log("login", res.token);
       setSuccess(true);
       setError(false);
     } else {
