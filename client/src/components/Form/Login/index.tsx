@@ -3,13 +3,15 @@ import { Alert, Form, Button } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { LoginUserDto } from "../../../utils/types/user.type";
 import { userLogin } from "../../../utils/api/user.api";
-import { useAuth } from "../../../utils/hooks/useAuth";
+import { useAuth } from "../../../utils/context/useAuth";
+import { useNavigate } from "react-router-dom";
 
 export const FormLogin = () => {
   const { register, handleSubmit } = useForm<LoginUserDto>();
-  const { login } = useAuth();
   const [success, setSuccess] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
+  const { loginUser } = useAuth();
+  const navigate = useNavigate();
 
   const onSubmit = handleSubmit(async (data: LoginUserDto) => {
     const res: any = await userLogin({
@@ -17,11 +19,14 @@ export const FormLogin = () => {
       password: data.password,
     });
 
+    loginUser(res);
+
     if (res.token) {
-      login(res.token);
-      console.log("login", res.token);
       setSuccess(true);
       setError(false);
+      setTimeout(() => {
+        navigate("/");
+      }, 2000);
     } else {
       setSuccess(false);
       setError(true);
@@ -48,13 +53,7 @@ export const FormLogin = () => {
           {...register("password")}
         />
       </Form.Group>
-      {success && (
-        <Alert variant="success">
-          Vous êtes connecté !
-          <br />
-          <Alert.Link href="/">Page d'accueil</Alert.Link>
-        </Alert>
-      )}
+      {success && <Alert variant="success">Vous êtes connecté !</Alert>}
       {error && <Alert variant="danger">Erreur lors de la connection...</Alert>}
       <Button variant="primary" type="submit">
         Envoyer

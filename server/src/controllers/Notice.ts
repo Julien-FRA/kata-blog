@@ -93,17 +93,14 @@ exports.update = async (req, res) => {
   const noticeId = req.params.noticeId;
 
   const notice = await NoticeModel.findById(noticeId);
-  console.log("notice", notice);
 
   if (!notice) {
     return res.status(404).send({ message: "Notice not found..." });
   }
 
   const userNoticeId = notice.userId;
-  console.log("userNoticeId", userNoticeId);
 
   const currentUserId = req.user.userId;
-  console.log("currentUserId", currentUserId);
 
   if (currentUserId != userNoticeId) {
     return res.status(401).send({ message: "Its not your notice!" });

@@ -3,11 +3,13 @@ import { useForm } from "react-hook-form";
 import { CreateUserDto } from "../../../utils/types/user.type";
 import { userRegister } from "../../../utils/api/user.api";
 import { Alert, Form, Button } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 
 export const FormRegister = () => {
   const { register, handleSubmit } = useForm<CreateUserDto>();
   const [success, setSuccess] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
+  const navigate = useNavigate();
 
   const onSubmit = handleSubmit(async (data: CreateUserDto) => {
     const res: any = await userRegister({
@@ -19,6 +21,9 @@ export const FormRegister = () => {
     if (res.user) {
       setSuccess(true);
       setError(false);
+      setTimeout(() => {
+        navigate("/login");
+      }, 2000);
     } else {
       setSuccess(false);
       setError(true);
@@ -55,11 +60,7 @@ export const FormRegister = () => {
         />
       </Form.Group>
       {success && (
-        <Alert variant="success">
-          Votre compte a été créée avec succès !
-          <br />
-          <Alert.Link href="/login">Vous connectez</Alert.Link>
-        </Alert>
+        <Alert variant="success">Votre compte a été créée avec succès !</Alert>
       )}
       {error && (
         <Alert variant="danger">
