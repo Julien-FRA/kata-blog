@@ -32,9 +32,9 @@ const Router = () => {
         <Route
           path="/"
           element={
-            // <ProtectedRoute>
-            <Home />
-            // </ProtectedRoute>
+            <ProtectedRoute>
+              <Home />
+            </ProtectedRoute>
           }
         />
         <Route path="/register" element={<Register />} />
