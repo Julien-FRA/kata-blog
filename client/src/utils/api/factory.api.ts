@@ -26,6 +26,28 @@ const apiFactory = (baseUrl: string) => ({
       return responseErrorHandler(error);
     }
   },
+
+  getAll: async (path: string) => {
+    try {
+      const response = await fetch(`${baseUrl}${path}`, {
+        method: "GET",
+        mode: "cors",
+        cache: "no-cache",
+        credentials: "same-origin",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        redirect: "follow",
+        referrerPolicy: "no-referrer",
+      });
+
+      const data = await response.json();
+
+      return data;
+    } catch (error) {
+      return responseErrorHandler(error);
+    }
+  },
 });
 
 export const api = apiFactory(`${process.env.REACT_APP_API_URL}`);

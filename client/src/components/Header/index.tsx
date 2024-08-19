@@ -6,7 +6,6 @@ import { useAuth } from "../../utils/context/useAuth";
 
 export const Header = () => {
   const { isLoggedIn, user, logout } = useAuth();
-  console.log("header", user);
 
   return (
     <Navbar bg="light" data-bs-theme="light">
