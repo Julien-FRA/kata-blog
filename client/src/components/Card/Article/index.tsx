@@ -40,7 +40,13 @@ export const CardArticle = () => {
               <Card.Title>{article.topic}</Card.Title>
               <Card.Subtitle>{article.author}</Card.Subtitle>
               <Card.Text>{article.content}</Card.Text>
-              <Button variant="primary">Lire l'article</Button>
+              <Button
+                variant="primary"
+                className="mb-3"
+                href={`/article/${article._id}`}
+              >
+                Lire l'article
+              </Button>
               <Card.Footer>{article.date}</Card.Footer>
             </Card.Body>
           </Card>

@@ -1,5 +1,5 @@
 export type ArticleDto = {
-  artileId: string;
+  _id: string;
   userId: string;
   author: string;
   date: string;

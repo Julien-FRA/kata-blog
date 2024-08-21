@@ -11,6 +11,7 @@ import { NoPage } from "./pages/NoPage";
 import { Register } from "./pages/Register";
 import { Login } from "./pages/Login";
 import { useAuth } from "./utils/context/useAuth";
+import { ContentArticle } from "./components/Content/Article";
 
 type Props = { children: React.ReactNode };
 
@@ -34,6 +35,14 @@ const Router = () => {
           element={
             <ProtectedRoute>
               <Home />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/article/:articleId"
+          element={
+            <ProtectedRoute>
+              <ContentArticle />
             </ProtectedRoute>
           }
         />
