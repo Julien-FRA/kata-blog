@@ -7,6 +7,10 @@ var schema: NoticeSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "Article",
   },
+  articleId: {
+    type: String,
+    ref: "Article",
+  },
   userId: {
     type: String,
     required: true,

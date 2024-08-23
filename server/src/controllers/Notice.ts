@@ -25,6 +25,7 @@ exports.create = async (req, res) => {
   }
 
   const notice = new NoticeModel({
+    articleId: article._id,
     userId: userId,
     userName: user.name,
     date: new Date(),
@@ -57,7 +58,7 @@ exports.findAll = async (req, res) => {
   }
 
   try {
-    await NoticeModel.find()
+    await NoticeModel.find({ articleId: articleId })
       .populate("article")
       .then((notice) => res.json(notice));
   } catch (error) {
