@@ -12,6 +12,7 @@ import { Register } from "./pages/Register";
 import { Login } from "./pages/Login";
 import { useAuth } from "./utils/context/useAuth";
 import { ContentArticle } from "./components/Content/Article";
+import { AddArticle } from "./components/Form/Article";
 
 type Props = { children: React.ReactNode };
 
@@ -43,6 +44,14 @@ const Router = () => {
           element={
             <ProtectedRoute>
               <ContentArticle />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/article/add"
+          element={
+            <ProtectedRoute>
+              <AddArticle />
             </ProtectedRoute>
           }
         />

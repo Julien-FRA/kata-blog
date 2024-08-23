@@ -7,6 +7,8 @@ const apiFactory = (baseUrl: string) => ({
     path: string,
     data: TInput
   ): Promise<TOutput> => {
+    const token = localStorage.getItem("token");
+
     try {
       const response = await fetch(`${baseUrl}${path}`, {
         method: "POST",
@@ -15,6 +17,7 @@ const apiFactory = (baseUrl: string) => ({
         credentials: "same-origin",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
         redirect: "follow",
         referrerPolicy: "no-referrer",

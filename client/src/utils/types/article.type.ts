@@ -6,3 +6,8 @@ export type ArticleDto = {
   topic: string;
   content: string;
 };
+
+export type CreateArticleDto = {
+  topic: string;
+  content: string;
+};

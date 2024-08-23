@@ -20,8 +20,6 @@ exports.create = async (req, res) => {
 
   const article = await ArticlesModel.findById(articleId);
 
-  console.log(article);
-
   if (!article) {
     return res.status(404).send({ message: "Article not found..." });
   }
@@ -33,8 +31,6 @@ exports.create = async (req, res) => {
     date: new Date(),
     description: req.body.description,
   });
-
-  console.log(notice);
 
   await notice
     .save()
