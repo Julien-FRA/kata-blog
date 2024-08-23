@@ -20,16 +20,21 @@ exports.create = async (req, res) => {
 
   const article = await ArticlesModel.findById(articleId);
 
+  console.log(article);
+
   if (!article) {
     return res.status(404).send({ message: "Article not found..." });
   }
 
   const notice = new NoticeModel({
+    articleId: article._id,
     userId: userId,
     userName: user.name,
     date: new Date(),
     description: req.body.description,
   });
+
+  console.log(notice);
 
   await notice
     .save()
@@ -57,7 +62,7 @@ exports.findAll = async (req, res) => {
   }
 
   try {
-    await NoticeModel.find()
+    await NoticeModel.find({ articleId: articleId })
       .populate("article")
       .then((notice) => res.json(notice));
   } catch (error) {
