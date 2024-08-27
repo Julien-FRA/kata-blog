@@ -1,5 +1,5 @@
 import { createContext, useEffect, useState } from "react";
-import { IsUserLoggedIn, UserDto } from "../types/user.type";
+import { IsUserLoggedIn, UpdateUserDto, UserDto } from "../types/user.type";
 import axios from "axios";
 import React from "react";
 
@@ -8,6 +8,7 @@ type UserContextType = {
   token: string | null;
   loginUser: (data: IsUserLoggedIn) => void;
   isLoggedIn: () => boolean;
+  updateUser: (data: UserDto) => void;
   logout: () => void;
 };
 
@@ -37,13 +38,31 @@ export const UserProvider = ({ children }: Props) => {
 
       const userObj = {
         id: data.userInformation.id,
+        email: data.userInformation.email,
         name: data.userInformation.name,
         role: data.userInformation.role,
       };
 
+      console.log(userObj);
+
       localStorage.setItem("user", JSON.stringify(userObj));
       setToken(data.token!);
       setUser(userObj!);
+    }
+  };
+
+  const updateUser = async (data: UserDto) => {
+    if (data) {
+      const newUserObj = {
+        id: data.id,
+        email: data.email,
+        name: data.name,
+        role: data.role,
+      };
+
+      localStorage.removeItem("user");
+      localStorage.setItem("user", JSON.stringify(newUserObj));
+      setUser(newUserObj!);
     }
   };
 
@@ -62,7 +81,7 @@ export const UserProvider = ({ children }: Props) => {
 
   return (
     <UserContext.Provider
-      value={{ user, token, loginUser, isLoggedIn, logout }}
+      value={{ user, token, loginUser, isLoggedIn, updateUser, logout }}
     >
       {children}
     </UserContext.Provider>

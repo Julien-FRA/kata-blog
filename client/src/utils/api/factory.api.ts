@@ -30,6 +30,35 @@ const apiFactory = (baseUrl: string) => ({
     }
   },
 
+  update: async <TInput, TOutput>(
+    path: string,
+    data: TInput
+  ): Promise<TOutput> => {
+    const token = localStorage.getItem("token");
+
+    try {
+      const response = await fetch(`${baseUrl}${path}`, {
+        method: "PATCH",
+        mode: "cors",
+        cache: "no-cache",
+        credentials: "same-origin",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        redirect: "follow",
+        referrerPolicy: "no-referrer",
+        body: JSON.stringify(data),
+      });
+
+      const dataUpdate = await response.json();
+
+      return dataUpdate as Promise<TOutput>;
+    } catch (error) {
+      return responseErrorHandler(error);
+    }
+  },
+
   getAll: async (path: string) => {
     try {
       const response = await fetch(`${baseUrl}${path}`, {
@@ -69,7 +98,9 @@ const apiFactory = (baseUrl: string) => ({
       const data = await response.json();
 
       return data;
-    } catch (error) {}
+    } catch (error) {
+      return responseErrorHandler(error);
+    }
   },
 });
 

@@ -18,6 +18,7 @@ export const Header = () => {
           {isLoggedIn() ? (
             <div className="d-flex align-items-center">
               <p className="mb-0 me-2">Bienvenue {user?.name}</p>
+              <Nav.Link href="/profil">Profil</Nav.Link>
               <Nav.Link onClick={logout}>Logout</Nav.Link>
             </div>
           ) : (

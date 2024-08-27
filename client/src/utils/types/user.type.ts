@@ -12,10 +12,16 @@ export type LoginUserDto = {
 export type UserDto = {
   id: string;
   name: string;
+  email: string;
   role: string;
 };
 
 export type IsUserLoggedIn = {
   token: string;
   userInformation: UserDto;
+};
+
+export type UpdateUserDto = {
+  email: string;
+  name: string;
 };

@@ -13,6 +13,7 @@ import { Login } from "./pages/Login";
 import { useAuth } from "./utils/context/useAuth";
 import { ContentArticle } from "./components/Content/Article";
 import { AddArticle } from "./components/Form/Article";
+import { Profil } from "./pages/Profil";
 
 type Props = { children: React.ReactNode };
 
@@ -36,6 +37,14 @@ const Router = () => {
           element={
             <ProtectedRoute>
               <Home />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/profil"
+          element={
+            <ProtectedRoute>
+              <Profil />
             </ProtectedRoute>
           }
         />
