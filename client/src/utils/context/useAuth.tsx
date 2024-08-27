@@ -1,5 +1,5 @@
 import { createContext, useEffect, useState } from "react";
-import { IsUserLoggedIn, UpdateUserDto, UserDto } from "../types/user.type";
+import { IsUserLoggedIn, UserDto } from "../types/user.type";
 import axios from "axios";
 import React from "react";
 
@@ -22,7 +22,7 @@ export const UserProvider = ({ children }: Props) => {
 
   useEffect(() => {
     const user = localStorage.getItem("user");
-    const token = localStorage.getItem("user");
+    const token = localStorage.getItem("token");
 
     if (user && token) {
       setUser(JSON.parse(user));
@@ -43,8 +43,6 @@ export const UserProvider = ({ children }: Props) => {
         role: data.userInformation.role,
       };
 
-      console.log(userObj);
-
       localStorage.setItem("user", JSON.stringify(userObj));
       setToken(data.token!);
       setUser(userObj!);
@@ -60,7 +58,6 @@ export const UserProvider = ({ children }: Props) => {
         role: data.role,
       };
 
-      localStorage.removeItem("user");
       localStorage.setItem("user", JSON.stringify(newUserObj));
       setUser(newUserObj!);
     }

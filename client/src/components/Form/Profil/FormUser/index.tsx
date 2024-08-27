@@ -13,9 +13,18 @@ export const FormUser = () => {
 
   const onSubmit = handleSubmit(async (data: UpdateUserDto) => {
     const res: any = await userUpdate(data);
-    console.log(res);
     updateUser(res.data);
+
+    if (res.message) {
+      setSuccess(true);
+      setError(false);
+    } else {
+      setSuccess(false);
+      setError(true);
+    }
   });
+
+  console.log(user);
 
   return (
     <div>
@@ -39,9 +48,11 @@ export const FormUser = () => {
             {...register("name")}
           />
         </Form.Group>
-        {success && <Alert variant="success">Vous êtes connecté !</Alert>}
+        {success && (
+          <Alert variant="success">Modification enregistré avec succès !</Alert>
+        )}
         {error && (
-          <Alert variant="danger">Erreur lors de la connection...</Alert>
+          <Alert variant="danger">Erreur lors de la modification...</Alert>
         )}
         <Button variant="primary" type="submit">
           Modifier
