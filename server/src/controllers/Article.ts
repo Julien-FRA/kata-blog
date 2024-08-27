@@ -58,6 +58,17 @@ exports.findOne = async (req, res) => {
   }
 };
 
+exports.findUserArticle = async (req, res) => {
+  const userId = req.user.userId;
+
+  try {
+    const article = await ArticleModel.find({ userId: userId });
+    res.status(200).json(article);
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
+};
+
 // Mise à jour d'un article avec son id
 exports.update = async (req, res) => {
   if (!req.body) {

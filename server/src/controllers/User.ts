@@ -59,7 +59,12 @@ exports.login = async (req, res) => {
       expiresIn: "1 hour",
     });
 
-    const userInformation = { id: user._id, name: user.name, role: user.role };
+    const userInformation = {
+      id: user._id,
+      email: user.email,
+      name: user.name,
+      role: user.role,
+    };
 
     res.json({ token, userInformation });
   } catch (error) {
@@ -106,7 +111,7 @@ exports.update = async (req, res) => {
           message: `User not found.`,
         });
       } else {
-        res.send({ message: "User updated successfully." });
+        res.send({ message: "User updated successfully.", data: data });
       }
     })
     .catch((err) => {
