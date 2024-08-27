@@ -24,8 +24,6 @@ export const FormUser = () => {
     }
   });
 
-  console.log(user);
-
   return (
     <div>
       <p className="h4">Information liés au compte :</p>

@@ -59,6 +59,31 @@ const apiFactory = (baseUrl: string) => ({
     }
   },
 
+  delete: async (path: string, id: string) => {
+    const token = localStorage.getItem("token");
+
+    try {
+      const response = await fetch(`${baseUrl}${path}/${id}`, {
+        method: "DELETE",
+        mode: "cors",
+        cache: "no-cache",
+        credentials: "same-origin",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        redirect: "follow",
+        referrerPolicy: "no-referrer",
+      });
+
+      const data = await response.json();
+
+      return data;
+    } catch (error) {
+      return responseErrorHandler(error);
+    }
+  },
+
   getAll: async (path: string) => {
     try {
       const response = await fetch(`${baseUrl}${path}`, {
@@ -68,6 +93,31 @@ const apiFactory = (baseUrl: string) => ({
         credentials: "same-origin",
         headers: {
           "Content-Type": "application/json",
+        },
+        redirect: "follow",
+        referrerPolicy: "no-referrer",
+      });
+
+      const data = await response.json();
+
+      return data;
+    } catch (error) {
+      return responseErrorHandler(error);
+    }
+  },
+
+  getAllWithSession: async (path: string) => {
+    const token = localStorage.getItem("token");
+
+    try {
+      const response = await fetch(`${baseUrl}${path}`, {
+        method: "GET",
+        mode: "cors",
+        cache: "no-cache",
+        credentials: "same-origin",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
         redirect: "follow",
         referrerPolicy: "no-referrer",
